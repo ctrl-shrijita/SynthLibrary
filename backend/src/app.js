@@ -19,10 +19,7 @@ app.set("trust proxy", 1);
 
 app.use(helmet());
 app.use(cors({
-  origin: [
-    "https://synth-library-git-main-ctrl-shrijitas-projects.vercel.app",
-    "https://synth-library.vercel.app"
-  ],
+  origin: true,
   credentials: true
 }));
 app.use(express.json({ limit: "1mb" }));
