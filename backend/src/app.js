@@ -19,7 +19,7 @@ export const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: "https://synth-library.vercel.app",
+    origin: "https://synth-library-git-main-ctrl-shrijitas-projects.vercel.app",
     credentials: true,
   })
 );
