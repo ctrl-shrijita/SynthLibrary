@@ -15,6 +15,7 @@ import { isbnRoutes } from "./routes/isbnRoutes.js"; // ← NEW
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 export const app = express();
+app.set("trust proxy", 1);
 
 app.use(helmet());
 app.use(
