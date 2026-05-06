@@ -14,30 +14,6 @@ const createTransporter = () =>
     }
   });
 
-// export const sendOtpEmail = async ({ to, name, otp }) => {
-//   const subject = "Your Digital Library verification code";
-//   const text = [
-//     `Hi ${name},`,
-//     "",
-//     `Your Digital Library verification code is ${otp}.`,
-//     `It expires in ${env.otpExpiresMinutes} minutes.`,
-//     "",
-//     "If you did not create this account, you can ignore this email."
-//   ].join("\n");
-
-//   if (!hasSmtpConfig) {
-//     console.log(`[dev email] OTP for ${to}: ${otp}`);
-//     return;
-//   }
-
-//   await createTransporter().sendMail({
-//     from: env.mailFrom,
-//     to,
-//     subject,
-//     text
-//   });
-// };
-
 export const sendOtpEmail = async ({ to, name, otp }) => {
   const subject = "Your Digital Library verification code";
   const text = [
@@ -49,6 +25,16 @@ export const sendOtpEmail = async ({ to, name, otp }) => {
     "If you did not create this account, you can ignore this email."
   ].join("\n");
 
-  console.log(`OTP for ${to}: ${otp}`);
-  return;
+  if (!hasSmtpConfig) {
+    console.log(`[dev email] OTP for ${to}: ${otp}`);
+    return;
+  }
+
+  await createTransporter().sendMail({
+    from: env.mailFrom,
+    to,
+    subject,
+    text
+  });
 };
+
