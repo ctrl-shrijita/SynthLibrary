@@ -16,6 +16,9 @@ import { isbnRoutes } from "./routes/isbnRoutes.js"; // ← NEW
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 export const app = express();
+
+app.use("/uploads", express.static(path.resolve("uploads")));
+
 app.set("trust proxy", 1);
 
 app.use(helmet());
@@ -45,6 +48,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/isbn", isbnRoutes); // ← NEW
-app.use("/uploads", express.static(path.resolve("uploads")));
 app.use(notFound);
 app.use(errorHandler);
