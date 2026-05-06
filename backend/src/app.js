@@ -3,6 +3,7 @@
 
 import express from "express";
 import cors from "cors";
+import path from "path";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -44,6 +45,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/isbn", isbnRoutes); // ← NEW
-
+app.use("/uploads", express.static(path.resolve("uploads")));
 app.use(notFound);
 app.use(errorHandler);
