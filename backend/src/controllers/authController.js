@@ -108,10 +108,9 @@ export const verifyRegistrationOtp = async (req, res, next) => {
     }
 
     const normalizedEmail = normalizeEmail(email);
-    if (!(await isDeliverableEmail(normalizedEmail))) {
+    if (!emailPattern.test(normalizedEmail)) {
       return res.status(400).json({ message: "Please enter a valid email address" });
     }
-
     const user = await User.findOne({ email: normalizedEmail }).select("+emailOtpHash +emailOtpExpiresAt");
     if (!user) {
       return res.status(404).json({ message: "Account not found" });
