@@ -4,7 +4,7 @@ dotenv.config();
 
 export const env = {
   port: process.env.PORT || 5000,
-  mongoUri: process.env.MONGO_URI || "mongodb+srv://shrijita7ghosh_db_user:<nm6YOdLxDpisnbhI>@cluster0.bbmocrh.mongodb.net/?appName=Cluster0",
+  mongoUri: process.env.MONGO_URI || "mongodb+srv://shrijita7ghosh_db_user:nm6YOdLxDpisnbhI@cluster0.bbmocrh.mongodb.net/?appName=Cluster0",
   jwtSecret: process.env.JWT_SECRET || "development-secret-change-me",
   clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
   cookieSecure: process.env.COOKIE_SECURE === "true",
