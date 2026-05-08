@@ -24,7 +24,7 @@ app.set("trust proxy", 1);
 app.use(helmet());
 
 app.use(cors({
-  origin: "https://synth-library.vercel.app",
+  origin: env.clientUrl,
   credentials: true
 }));
 

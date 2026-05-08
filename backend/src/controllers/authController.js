@@ -10,7 +10,7 @@ import { publicUser } from "../utils.js";
 const cookieOptions = {
   httpOnly: true,
   sameSite: "none",
-  secure: true,
+  secure: env.cookieSecure || process.env.NODE_ENV === "production",
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
