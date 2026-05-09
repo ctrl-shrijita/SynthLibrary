@@ -57,9 +57,9 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/books", bookRoutes);
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/isbn", isbnRoutes); // ← NEW
+app.use("/auth", authRoutes);
+app.use("/books", bookRoutes);
+app.use("/transactions", transactionRoutes);
+app.use("/isbn", isbnRoutes); // ← NEW
 app.use(notFound);
 app.use(errorHandler);
