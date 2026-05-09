@@ -24,13 +24,16 @@ app.set("trust proxy", 1);
 app.use(helmet());
 
 const allowedOrigins = [
-  "https://synth-library.vercel.app",
-  "https://synth-library-git-main-ctrl-shrijitas-projects.vercel.app"
+  "https://synth-library.vercel.app"
 ];
 
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".vercel.app")
+    ) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -38,7 +41,6 @@ app.use(cors({
   },
   credentials: true
 }));
-
 
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
