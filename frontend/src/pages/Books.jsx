@@ -16,7 +16,7 @@ export default function Books() {
       genre: filters.genre || undefined,
       availableOnly: filters.availableOnly ? "true" : undefined
     };
-    const res = await api.get("/api/books", { params });
+    const res = await api.get("/books", { params });
     setBooks(res.data.books);
   };
 
@@ -32,7 +32,7 @@ export default function Books() {
 
   const borrow = async (book) => {
     try {
-      await api.post(`/api/transactions/borrow/${book._id}`);
+      await api.post(`/transactions/borrow/${book._id}`);
       setMessage(`Borrowed ${book.title}`);
       await loadBooks();
     } catch (err) {
