@@ -46,7 +46,7 @@ app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(
-  "/api/auth",
+  "/auth",
   rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
