@@ -3,16 +3,17 @@ import { env } from "../config/env.js";
 
 const hasSmtpConfig = Boolean(env.smtpHost && env.smtpUser && env.smtpPass);
 
-const createTransporter = () =>
-  nodemailer.createTransport({
-    host: env.smtpHost,
-    port: env.smtpPort,
-    secure: env.smtpSecure,
-    auth: {
-      user: env.smtpUser,
-      pass: env.smtpPass
-    }
-  });
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  },
+  family: 4 // <--- ADD THIS LINE: Forces Nodemailer to use IPv4
+});
+
 
 export const sendOtpEmail = async ({ to, name, otp }) => {
   const subject = "Your Digital Library verification code";
@@ -30,11 +31,12 @@ export const sendOtpEmail = async ({ to, name, otp }) => {
     return;
   }
 
-  await createTransporter().sendMail({
+  await transporter.sendMail({
     from: env.mailFrom,
     to,
     subject,
     text
   });
 };
+
 
