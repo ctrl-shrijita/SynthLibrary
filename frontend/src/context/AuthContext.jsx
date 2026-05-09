@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     api
-      .get("/api/auth/me")
+      .get("/auth/me")
       .then((res) => setUser(res.data.user))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
@@ -20,25 +20,25 @@ export const AuthProvider = ({ children }) => {
       user,
       loading,
       login: async (payload) => {
-        const res = await api.post("/api/auth/login", payload);
+        const res = await api.post("/auth/login", payload);
         setUser(res.data.user);
         return res.data.user;
       },
       register: async (payload) => {
-        const res = await api.post("/api/auth/register", payload);
+        const res = await api.post("/auth/register", payload);
         return res.data;
       },
       verifyRegistrationOtp: async (payload) => {
-        const res = await api.post("/api/auth/verify-registration-otp", payload);
+        const res = await api.post("/auth/verify-registration-otp", payload);
         setUser(res.data.user);
         return res.data.user;
       },
       resendRegistrationOtp: async (payload) => {
-        const res = await api.post("/api/auth/resend-registration-otp", payload);
+        const res = await api.post("/auth/resend-registration-otp", payload);
         return res.data;
       },
       logout: async () => {
-        await api.post("/api/auth/logout");
+        await api.post("/auth/logout");
         setUser(null);
       }
     }),
