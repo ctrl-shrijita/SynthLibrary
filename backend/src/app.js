@@ -4,6 +4,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -17,14 +18,20 @@ import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 export const app = express();
 
-app.use("/uploads", express.static(path.resolve("uploads")));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.resolve(__dirname, "../uploads");
+
+app.use("/uploads", express.static(uploadsDir));
 
 app.set("trust proxy", 1);
 
 app.use(helmet());
 
 const allowedOrigins = [
-  "https://synth-library.vercel.app"
+  env.clientUrl,
+  "http://localhost:5173",
+  "http://localhost:4173"
 ];
 
 app.use(cors({
@@ -53,13 +60,13 @@ app.use(
   })
 );
 
-app.get("/health", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.use("/auth", authRoutes);
-app.use("/books", bookRoutes);
-app.use("/transactions", transactionRoutes);
-app.use("/isbn", isbnRoutes); // ← NEW
+app.use("/api/auth", authRoutes);
+app.use("/api/books", bookRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/isbn", isbnRoutes); // ← NEW
 app.use(notFound);
 app.use(errorHandler);

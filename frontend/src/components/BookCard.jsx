@@ -1,16 +1,11 @@
 import { BookMarked, Calendar, CheckCircle2, FileText } from "lucide-react";
+import { getAssetUrl } from "../api/client.js";
 
 const fallback =
   "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=600&q=80";
 
 export default function BookCard({ book, actionLabel, onAction, disabled }) {
-  const apiBaseUrl =
-  (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace("/api", "");
-  const pdfLink = book.pdfUrl
-    ? book.pdfUrl.startsWith("http")
-      ? book.pdfUrl
-      : `${apiBaseUrl}${book.pdfUrl}`
-    : "";
+  const pdfLink = getAssetUrl(book.pdfUrl);
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">

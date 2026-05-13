@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { BookCheck, Clock, Sparkles } from "lucide-react";
-import { api, getErrorMessage } from "../api/client.js";
+import { BookCheck, Clock, FileText, Sparkles } from "lucide-react";
+import { api, getAssetUrl, getErrorMessage } from "../api/client.js";
 import BookCard from "../components/BookCard.jsx";
 import { formatDate, formatDateTime, money } from "../utils/date.js";
 
@@ -99,15 +99,13 @@ export default function UserDashboard() {
                 <div className="flex flex-col gap-2">
                   {item.book?.pdfUrl && (
                     <a
-                      href={(() => {
-                        const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
-                        return item.book.pdfUrl.startsWith("http") ? item.book.pdfUrl : `${apiBaseUrl}${item.book.pdfUrl}`;
-                      })()}
+                      href={getAssetUrl(item.book.pdfUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-1 rounded-md bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
                     >
-                      📄 Read PDF
+                      <FileText className="h-4 w-4" />
+                      Read PDF
                     </a>
                   )}
                   <button
