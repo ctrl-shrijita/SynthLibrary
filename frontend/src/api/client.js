@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const apiHost = import.meta.env.VITE_API_URL?.replace(/\/$/, "") || "";
-export const apiBaseUrl = apiHost ? `${apiHost}/api` : "/api";
-export const assetBaseUrl = apiHost;
+export const apiBaseUrl = "/api";
 
 export const api = axios.create({
   baseURL: apiBaseUrl,
@@ -12,7 +10,7 @@ export const api = axios.create({
 export const getAssetUrl = (path) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
-  return assetBaseUrl ? `${assetBaseUrl}${path}` : path;
+  return path;
 };
 
 // Handle FormData requests properly
@@ -26,5 +24,4 @@ api.interceptors.request.use((config) => {
 
 export const getErrorMessage = (error) =>
   error.response?.data?.message || error.message || "Something went wrong";
-
 

@@ -20,7 +20,5 @@ export const env = {
   mailFrom: process.env.MAIL_FROM || process.env.SMTP_USER || "no-reply@digital-library.local",
   otpExpiresMinutes: Number(process.env.OTP_EXPIRES_MINUTES || 10),
   googleBooksApiKey: process.env.GOOGLE_BOOKS_API_KEY || "",
-  
-  // NEW: Flag to bypass SMTP on Render's Free Tier
   mockEmail: process.env.MOCK_EMAIL === "true"
 };
