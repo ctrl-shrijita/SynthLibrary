@@ -3,8 +3,10 @@ import { BookCheck, Clock, Sparkles } from "lucide-react";
 import { api, getErrorMessage } from "../api/client.js";
 import BookCard from "../components/BookCard.jsx";
 import { formatDate, formatDateTime, money } from "../utils/date.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function UserDashboard() {
+  const { user: currentUser } = useAuth();
   const [featured, setFeatured] = useState([]);
   const [trending, setTrending] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
@@ -58,7 +60,12 @@ export default function UserDashboard() {
     <main className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-sm font-semibold uppercase text-emerald-700">User Dashboard</p>
+          <div className="flex items-center gap-3">
+            <p className="text-sm font-semibold uppercase text-emerald-700">User Dashboard</p>
+            <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/20 capitalize">
+              Logged in as {currentUser?.role}
+            </span>
+          </div>
           <h1 className="mt-2 text-3xl font-bold text-slate-950">Your Reading Shelf</h1>
         </div>
         {message && <div className="rounded-md bg-white px-4 py-2 text-sm text-slate-700 shadow-sm">{message}</div>}

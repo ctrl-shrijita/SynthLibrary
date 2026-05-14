@@ -3,6 +3,8 @@
 
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -12,17 +14,59 @@ import { authRoutes } from "./routes/authRoutes.js";
 import { bookRoutes } from "./routes/bookRoutes.js";
 import { transactionRoutes } from "./routes/transactionRoutes.js";
 import { isbnRoutes } from "./routes/isbnRoutes.js"; // ← NEW
+import { userRoutes } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 export const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.resolve(__dirname, "../uploads");
+
+app.use("/uploads", express.static(uploadsDir));
+
+app.set("trust proxy", 1);
+
 app.use(helmet());
-app.use(
-  cors({
-    origin: env.clientUrl,
-    credentials: true,
-  })
-);
+
+const allowedOrigins = [
+  env.clientUrl,
+  "http://localhost:5173",
+  "http://localhost:4173"
+];
+
+// app.use(cors({
+//   origin: function(origin, callback) {
+//     if (
+//       !origin ||
+//       allowedOrigins.includes(origin) ||
+//       origin.endsWith(".vercel.app")
+//     ) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   credentials: true
+// }));
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.includes(".vercel.app")
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true
+}));
+
+
 app.use(express.json({ limit: "1mb" }));
 app.use(cookieParser());
 app.use(morgan("dev"));
@@ -34,7 +78,7 @@ app.use(
   })
 );
 
-app.get("/health", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
@@ -42,6 +86,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/isbn", isbnRoutes); // ← NEW
-
+app.use("/api/users", userRoutes);
 app.use(notFound);
 app.use(errorHandler);

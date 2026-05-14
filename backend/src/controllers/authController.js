@@ -4,7 +4,7 @@ import dns from "dns/promises";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 import { User } from "../models/User.js";
-import { sendOtpEmail } from "../services/emailService.js";
+import { sendOtpEmail, sendPasswordResetEmail } from "../services/emailService.js";
 import { publicUser } from "../utils.js";
 
 const cookieOptions = {
@@ -177,6 +177,60 @@ export const login = async (req, res, next) => {
     }
 
     return sendToken(res, user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const normalizedEmail = normalizeEmail(email);
+    const user = await User.findOne({ email: normalizedEmail });
+    
+    if (!user) {
+      // Always return success even if user not found to prevent malicious "email enumeration" scanning
+      return res.json({ message: "If your email is registered, a reset code has been sent." });
+    }
+
+    const otp = generateOtp();
+    user.emailOtpHash = hashOtp(otp); // Safely reusing your existing OTP database fields
+    user.emailOtpExpiresAt = new Date(Date.now() + env.otpExpiresMinutes * 60 * 1000);
+    await user.save();
+
+    await sendPasswordResetEmail({ to: user.email, name: user.name, otp });
+    res.json({ message: "If your email is registered, a reset code has been sent." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "Email, reset code, and new password are required" });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
+
+    const user = await User.findOne({ email: normalizeEmail(email) }).select("+emailOtpHash +emailOtpExpiresAt +passwordHash");
+    if (!user) return res.status(400).json({ message: "Invalid request" });
+
+    const isExpired = !user.emailOtpExpiresAt || user.emailOtpExpiresAt.getTime() < Date.now();
+    const isMatch = user.emailOtpHash && hashOtp(otp) === user.emailOtpHash;
+
+    if (isExpired || !isMatch) return res.status(400).json({ message: "Invalid or expired reset code" });
+
+    user.passwordHash = await bcrypt.hash(newPassword, 12);
+    user.emailOtpHash = undefined;
+    user.emailOtpExpiresAt = undefined;
+    await user.save();
+
+    res.json({ message: "Password has been successfully reset. You can now log in." });
   } catch (error) {
     next(error);
   }

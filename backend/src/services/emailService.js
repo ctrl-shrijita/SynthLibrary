@@ -20,20 +20,30 @@ export const sendOtpEmail = async ({ to, name, otp }) => {
     `Hi ${name},`,
     "",
     `Your Digital Library verification code is ${otp}.`,
-    `It expires in ${env.otpExpiresMinutes} minutes.`,
+    `It expires in ${env.otpExpiresMinutes || 15} minutes.`,
     "",
-    "If you did not create this account, you can ignore this email."
+    "If you didn't request this, please ignore this email."
   ].join("\n");
 
-  if (!hasSmtpConfig) {
-    console.log(`[dev email] OTP for ${to}: ${otp}`);
-    return;
+  if (hasSmtpConfig) {
+    const transporter = createTransporter();
+    await transporter.sendMail({ from: env.smtpUser, to, subject, text });
   }
+};
 
-  await createTransporter().sendMail({
-    from: env.mailFrom,
-    to,
-    subject,
-    text
-  });
+export const sendPasswordResetEmail = async ({ to, name, otp }) => {
+  const subject = "Your Digital Library password reset code";
+  const text = [
+    `Hi ${name},`,
+    "",
+    `Your password reset code is ${otp}.`,
+    `It expires in ${env.otpExpiresMinutes || 15} minutes.`,
+    "",
+    "If you didn't request this, please ignore this email."
+  ].join("\n");
+
+  if (hasSmtpConfig) {
+    const transporter = createTransporter();
+    await transporter.sendMail({ from: env.smtpUser, to, subject, text });
+  }
 };

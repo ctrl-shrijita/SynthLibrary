@@ -5,7 +5,9 @@ import {
   me,
   register,
   resendRegistrationOtp,
-  verifyRegistrationOtp
+  verifyRegistrationOtp,
+  forgotPassword,
+  resetPassword
 } from "../controllers/authController.js";
 import { authRequired } from "../middleware/auth.js";
 
@@ -17,3 +19,5 @@ authRoutes.post("/resend-registration-otp", resendRegistrationOtp);
 authRoutes.post("/login", login);
 authRoutes.post("/logout", logout);
 authRoutes.get("/me", authRequired, me);
+authRoutes.post("/forgot-password", forgotPassword);
+authRoutes.post("/reset-password", resetPassword);
