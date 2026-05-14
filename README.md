@@ -1,84 +1,144 @@
-# Digital Library
+# 📚 Synth Library — Digital Library Management System
 
-A full-stack Digital Library application with role-based Admin and User experiences.
+Synth Library is a full-stack Digital Library Management Web Application built using the MERN stack. The platform provides secure authentication, OTP-based email verification, book management, borrowing workflows, and responsive user interfaces for seamless library operations.
 
-## Tech Stack
+---
 
-- Frontend: React, Vite, Tailwind CSS, Recharts
-- Backend: Node.js, Express, MongoDB, Mongoose
-- Auth: JWT in HTTP-only cookies, bcrypt password hashing
+## 🚀 Features
 
-## Features
+* 🔐 JWT Authentication & Secure Cookie-Based Sessions
+* 📧 OTP-Based Email Verification System
+* 📚 Book Management & Inventory Handling
+* 🔄 Borrow & Return Transaction Workflows
+* 🖼️ File/Image Upload Support using Multer
+* 🌐 RESTful API Architecture
+* 🎨 Responsive Frontend UI with Tailwind CSS
+* ⚡ Fast Frontend Build using Vite
+* ☁️ MongoDB Atlas Cloud Database Integration
+* 🛡️ Security Middleware using Helmet, CORS & Rate Limiting
 
-- User registration and login
-- Admin and user roles stored in MongoDB
-- Role-specific redirects and guarded routes
-- Admin book management with availability checks
-- Borrow and return workflow with max active borrow limit
-- Fine calculation: `$1/day` after 14 days by default
-- Borrowing blocked when outstanding fines exceed `$10`
-- Featured, trending, and genre-based recommendation endpoints
-- Admin charts for borrows per day/week
-- Responsive admin and user interfaces
+---
 
-## Run Locally
+## 🛠️ Tech Stack
 
-1. Install Node.js 20+ and MongoDB.
-2. Start MongoDB locally or use MongoDB Atlas.
-3. Create `backend/.env` from `backend/.env.example`.
-4. Install dependencies:
+### Frontend
+
+* React.js
+* Vite
+* Tailwind CSS
+* Axios
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB Atlas
+* JWT Authentication
+* Nodemailer
+* Multer
+
+---
+
+## 📂 Project Structure
 
 ```bash
+Synth-Library/
+│
+├── frontend/
+│   ├── src/
+│   └── ...
+│
+├── backend/
+│   ├── src/
+│   ├── api/
+│   └── ...
+│
+└── README.md
+```
+
+---
+
+## ⚙️ Running the Project Locally
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone <your-repository-url>
+cd Synth-Library
+```
+
+---
+
+### 2️⃣ Setup Backend
+
+```bash
+cd backend
 npm install
-npm run install:all
-```
-
-5. Optional: create a demo admin, user, and sample books:
-
-```bash
-npm run seed --prefix backend
-```
-
-6. Start both apps:
-
-```bash
 npm run dev
 ```
 
-Frontend: `http://localhost:5173`
+Backend runs on:
 
-Backend: `http://localhost:5000`
-
-## Demo Accounts
-
-The seed command creates:
-
-- Admin: `admin@example.com` / `Password123!`
-- User: `user@example.com` / `Password123!`
-
-## First Admin User Without Seed Data
-
-Register normally, then update that user's role in MongoDB:
-
-```js
-db.users.updateOne({ email: "admin@example.com" }, { $set: { role: "admin" } })
+```bash
+http://localhost:5000
 ```
 
-## Main API Routes
+---
 
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET /api/auth/me`
-- `GET /api/books`
-- `POST /api/books` admin
-- `PATCH /api/books/:id` admin
-- `DELETE /api/books/:id` admin
-- `GET /api/books/featured`
-- `GET /api/books/trending`
-- `GET /api/books/recommendations`
-- `POST /api/transactions/borrow/:bookId`
-- `POST /api/transactions/return/:transactionId`
-- `GET /api/transactions/my-history`
-- `GET /api/transactions/admin/all` admin
-- `GET /api/transactions/admin/stats` admin
+### 3️⃣ Setup Frontend
+
+Open another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs on:
+
+```bash
+http://localhost:5173
+```
+
+---
+
+## 🔑 Environment Variables
+
+### Backend `.env`
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_atlas_url
+JWT_SECRET=your_secret_key
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email
+SMTP_PASS=your_password
+
+CLIENT_URL=http://localhost:5173
+```
+
+---
+
+### Frontend `.env`
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+---
+
+## 📸 Core Functionalities
+
+* User Registration & Login
+* OTP Email Verification
+* Secure Authentication
+* Book Listing & Management
+* Borrow / Return System
+* Responsive Dashboard
+* Protected Routes
+* API Integration
+
+---
